@@ -119,10 +119,7 @@
             content: '';
             position: fixed;
             inset: 0;
-            background: 
-                radial-gradient(ellipse 800px 600px at 20% -10%, rgba(59, 130, 246, 0.18), transparent 60%),
-                radial-gradient(ellipse 900px 700px at 90% 110%, rgba(139, 92, 246, 0.15), transparent 60%),
-                radial-gradient(ellipse 600px 500px at 50% 50%, rgba(16, 185, 129, 0.06), transparent 70%);
+            background: none;
             pointer-events: none;
             z-index: 0;
         }
@@ -255,6 +252,7 @@
             -webkit-backdrop-filter: blur(12px);
             font-size: 1.05rem;
             flex-shrink: 0;
+            position: relative;
         }
 
         .icon-btn:hover {
@@ -264,6 +262,29 @@
         }
 
         .icon-btn:active { transform: scale(0.95); }
+
+        .notif-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            min-width: 18px;
+            height: 18px;
+            padding: 0 5px;
+            border-radius: 9px;
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            font-size: 0.62rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--bg-primary);
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.6);
+            font-family: 'Space Grotesk', sans-serif;
+            line-height: 1;
+        }
+
+        .notif-badge.hidden { display: none; }
 
         /* ====== SELETOR DE MÊS ====== */
         .month-selector {
@@ -289,7 +310,7 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.04), transparent);
+            background: none;
             pointer-events: none;
         }
 
@@ -404,7 +425,7 @@
             right: -20%;
             width: 260px;
             height: 260px;
-            background: radial-gradient(circle, var(--accent-glow), transparent 65%);
+            background: none;
             pointer-events: none;
         }
 
@@ -537,7 +558,7 @@
             border: 1px solid var(--border);
             border-radius: var(--radius-md);
             padding: 12px 16px 14px;
-            margin-bottom: 18px;
+            margin-bottom: 12px;
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             width: 100%;
@@ -616,6 +637,319 @@
         .legend-dot.green { background: var(--green); box-shadow: 0 0 5px var(--green); }
         .legend-dot.orange { background: var(--orange); box-shadow: 0 0 5px var(--orange); }
 
+        /* ====== CARD DE SALDO ====== */
+        .balance-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            margin-bottom: 18px;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            width: 100%;
+            overflow: hidden;
+            transition: border-color 0.2s;
+            box-shadow: none;
+        }
+
+        .balance-card:hover { border-color: var(--border-bright); }
+
+        .balance-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 16px;
+            gap: 12px;
+            cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .balance-header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 0;
+            flex: 1;
+        }
+
+        .balance-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.15));
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: var(--green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .balance-icon svg { width: 20px; height: 20px; }
+
+        .balance-info { min-width: 0; flex: 1; }
+
+        .balance-label {
+            font-size: 0.62rem;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: var(--text-muted);
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .balance-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: var(--green);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            transition: color 0.2s;
+        }
+
+        .balance-value.negative { color: var(--red); }
+
+        .balance-actions {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+            align-items: center;
+        }
+
+        .balance-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 11px;
+            border: 1px solid;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            padding: 0;
+            flex-shrink: 0;
+        }
+
+        .balance-btn svg { width: 16px; height: 16px; }
+
+        .balance-btn.add {
+            background: rgba(16, 185, 129, 0.15);
+            border-color: rgba(16, 185, 129, 0.35);
+            color: var(--green);
+        }
+
+        .balance-btn.add:hover {
+            background: rgba(16, 185, 129, 0.3);
+            border-color: var(--green);
+            transform: scale(1.05);
+            box-shadow: none;
+        }
+
+        .balance-btn.remove {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: rgba(239, 68, 68, 0.35);
+            color: var(--red);
+        }
+
+        .balance-btn.remove:hover {
+            background: rgba(239, 68, 68, 0.3);
+            border-color: var(--red);
+            transform: scale(1.05);
+            box-shadow: none;
+        }
+
+        .balance-btn:active { transform: scale(0.92); }
+
+        .balance-expand {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            border-top: 1px solid transparent;
+        }
+
+        .balance-card.expanded .balance-expand {
+            max-height: 500px;
+            border-top-color: var(--border);
+            overflow-y: auto;
+        }
+
+        .balance-history-header {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 12px 16px 8px;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: var(--text-muted);
+            font-weight: 700;
+        }
+
+        .balance-history {
+            padding: 0 16px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .balance-history-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 10px 12px;
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-size: 0.82rem;
+        }
+
+        .balance-history-item-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 0;
+            flex: 1;
+        }
+
+        .balance-history-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .balance-history-dot.add {
+            background: var(--green);
+            box-shadow: 0 0 8px var(--green-glow);
+        }
+
+        .balance-history-dot.remove {
+            background: var(--red);
+            box-shadow: 0 0 8px var(--red-glow);
+        }
+
+        .balance-history-dot.paid {
+            background: var(--orange);
+            box-shadow: 0 0 8px var(--orange-glow);
+        }
+
+        .balance-history-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            min-width: 0;
+            flex: 1;
+        }
+
+        .balance-history-desc {
+            font-weight: 600;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .balance-history-date {
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .balance-history-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 0.88rem;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .balance-history-value.add { color: var(--green); }
+        .balance-history-value.remove { color: var(--red); }
+        .balance-history-value.paid { color: var(--orange); }
+
+        .balance-history-empty {
+            text-align: center;
+            padding: 16px 8px;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            font-style: italic;
+        }
+
+        .balance-chevron {
+            color: var(--text-muted);
+            transition: transform 0.3s;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+        }
+
+        .balance-card.expanded .balance-chevron { transform: rotate(180deg); }
+
+        .balance-chevron svg { width: 16px; height: 16px; }
+
+        /* Modal de saldo - seletor de tipo */
+        .balance-modal-type {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            padding: 4px;
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+        }
+
+        .balance-modal-type-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 11px;
+            border: 1px solid transparent;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: inherit;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .balance-modal-type-btn.active.add {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--green);
+            border-color: rgba(16, 185, 129, 0.5);
+            box-shadow: 0 4px 12px -4px var(--green-glow);
+        }
+
+        .balance-modal-type-btn.active.remove {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--red);
+            border-color: rgba(239, 68, 68, 0.5);
+            box-shadow: 0 4px 12px -4px var(--red-glow);
+        }
+
+        .balance-modal-type-btn svg { width: 16px; height: 16px; }
+        .balance-modal-type-btn.active.add svg { color: var(--green); }
+        .balance-modal-type-btn.active.remove svg { color: var(--red); }
+
+        /* CORREÇÃO: Cabeçalho colorido no modal de saldo */
+        .modal-title.balance-title-add {
+            color: var(--green);
+        }
+
+        .modal-title.balance-title-remove {
+            color: var(--red);
+        }
+
         .section-banner {
             position: relative;
             display: flex;
@@ -641,7 +975,7 @@
             right: -10%;
             width: 180px;
             height: 180px;
-            background: radial-gradient(circle, var(--accent-glow), transparent 65%);
+            background: none;
             opacity: 0.5;
             pointer-events: none;
         }
@@ -1409,7 +1743,7 @@
         .export-month-check svg { width: 12px; height: 12px; opacity: 0; }
         .export-month-item.selected .export-month-check svg { opacity: 1; }
 
-        /* ====== SOBRE - NOVO ====== */
+        /* ====== SOBRE ====== */
         .about-card {
             background: var(--surface);
             border: 1px solid var(--border);
@@ -1478,8 +1812,12 @@
         }
 
         .about-item-value.email {
-            font-size: 0.95rem;
-            letter-spacing: 0;
+            font-size: 0.85rem;
+            letter-spacing: -0.2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-family: 'Space Grotesk', sans-serif;
         }
 
         .about-version {
@@ -1651,6 +1989,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            transition: color 0.25s ease;
         }
 
         .modal-subtitle {
@@ -2311,6 +2650,219 @@
             font-weight: 500;
         }
 
+        /* ====== NOTIFICAÇÕES ====== */
+        .notif-overlay {
+            position: fixed;
+            inset: 0;
+            background: var(--overlay-bg);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            z-index: 220;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            padding-top: calc(80px + var(--safe-top));
+        }
+
+        .notif-overlay.active { opacity: 1; pointer-events: all; }
+
+        .notif-panel {
+            width: calc(100% - 32px);
+            max-width: 448px;
+            max-height: 70vh;
+            background: var(--modal-bg);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 20px;
+            transform: translateY(-20px) scale(0.96);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .notif-overlay.active .notif-panel {
+            transform: translateY(0) scale(1);
+        }
+
+        .notif-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            flex-shrink: 0;
+        }
+
+        .notif-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .notif-clear-all {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            padding: 6px 12px;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 0.72rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .notif-clear-all:hover {
+            border-color: var(--red-border);
+            color: var(--red);
+            background: rgba(239, 68, 68, 0.08);
+        }
+
+        .notif-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .notif-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 14px;
+            background: var(--input-bg);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .notif-item:hover {
+            border-color: var(--border-bright);
+            background: rgba(120, 140, 200, 0.08);
+        }
+
+        .notif-item:active {
+            transform: scale(0.98);
+        }
+
+        .notif-item-icon {
+            width: 34px;
+            height: 34px;
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 1rem;
+        }
+
+        .notif-item-icon.warning {
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            color: var(--orange);
+        }
+
+        .notif-item-icon.info {
+            background: rgba(59, 130, 246, 0.15);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: var(--accent);
+        }
+
+        .notif-item-icon.success {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: var(--green);
+        }
+
+        .notif-item-icon.danger {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: var(--red);
+        }
+
+        .notif-item-body {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .notif-item-text {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.35;
+            margin-bottom: 4px;
+            word-break: break-word;
+        }
+
+        .notif-item-date {
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .notif-item-delete {
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: var(--red);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: all 0.2s;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .notif-item.show-delete .notif-item-delete {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .notif-item-delete:hover {
+            background: rgba(239, 68, 68, 0.3);
+            border-color: var(--red);
+        }
+
+        .notif-item-delete svg { width: 14px; height: 14px; }
+
+        .notif-empty {
+            text-align: center;
+            padding: 32px 16px;
+            color: var(--text-muted);
+        }
+
+        .notif-empty-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            opacity: 0.4;
+        }
+
+        .notif-empty p {
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .notif-empty small {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+
         @media (min-width: 481px) {
             .app-shell {
                 height: 92vh;
@@ -2330,6 +2882,10 @@
             .settings-sheet {
                 border-radius: 32px;
                 border-bottom: 1px solid var(--border);
+            }
+            .notif-overlay {
+                align-items: center;
+                padding-top: 0;
             }
         }
     </style>
@@ -2352,6 +2908,13 @@
                         <div class="brand-text"><strong>ORGANIZA</strong></div>
                     </div>
                     <div class="header-actions">
+                        <button class="icon-btn" id="notifBellBtn" title="Notificações">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                                <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                            </svg>
+                            <span class="notif-badge hidden" id="notifBadge">0</span>
+                        </button>
                         <button class="icon-btn settings-trigger" title="Configurações">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="12" cy="12" r="3"/>
@@ -2443,6 +3006,52 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- CARD DE SALDO -->
+                <div class="balance-card" id="balanceCard">
+                    <div class="balance-header">
+                        <div class="balance-header-left">
+                            <div class="balance-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="2" y="5" width="20" height="14" rx="2"/>
+                                    <line x1="2" y1="10" x2="22" y2="10"/>
+                                </svg>
+                            </div>
+                            <div class="balance-info">
+                                <div class="balance-label">Saldo em Conta</div>
+                                <div class="balance-value" id="balanceValue">R$ 0,00</div>
+                            </div>
+                        </div>
+                        <div class="balance-actions">
+                            <button class="balance-btn add" id="addBalanceBtn" title="Adicionar saldo">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="12" y1="5" x2="12" y2="19"/>
+                                    <line x1="5" y1="12" x2="19" y2="12"/>
+                                </svg>
+                            </button>
+                            <button class="balance-btn remove" id="removeBalanceBtn" title="Retirar saldo">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="5" y1="12" x2="19" y2="12"/>
+                                </svg>
+                            </button>
+                            <div class="balance-chevron">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="6 9 12 15 18 9"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="balance-expand" id="balanceExpand">
+                        <div class="balance-history-header">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                            Histórico de Movimentações
+                        </div>
+                        <div class="balance-history" id="balanceHistory"></div>
+                    </div>
+                </div>
             </main>
 
             <nav class="bottom-nav">
@@ -2517,6 +3126,13 @@
                         <div class="brand-text"><strong>ORGANIZA</strong></div>
                     </div>
                     <div class="header-actions">
+                        <button class="icon-btn" id="notifBellBtnWeek" title="Notificações">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                                <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                            </svg>
+                            <span class="notif-badge hidden" id="notifBadgeWeek">0</span>
+                        </button>
                         <button class="icon-btn settings-trigger" title="Configurações">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="12" cy="12" r="3"/>
@@ -2632,6 +3248,13 @@
                         <div class="brand-text"><strong>ORGANIZA</strong></div>
                     </div>
                     <div class="header-actions">
+                        <button class="icon-btn" id="notifBellBtnMonth" title="Notificações">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                                <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                            </svg>
+                            <span class="notif-badge hidden" id="notifBadgeMonth">0</span>
+                        </button>
                         <button class="icon-btn settings-trigger" title="Configurações">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="12" cy="12" r="3"/>
@@ -2773,6 +3396,13 @@
                         <div class="brand-text"><strong>ORGANIZA</strong></div>
                     </div>
                     <div class="header-actions">
+                        <button class="icon-btn" id="notifBellBtnProfile" title="Notificações">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                                <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                            </svg>
+                            <span class="notif-badge hidden" id="notifBadgeProfile">0</span>
+                        </button>
                         <button class="icon-btn settings-trigger" title="Configurações">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="12" cy="12" r="3"/>
@@ -3118,6 +3748,55 @@
         </div>
     </div>
 
+    <!-- MODAL SALDO -->
+    <div class="modal-overlay" id="balanceModalOverlay">
+        <div class="modal-sheet">
+            <div class="modal-handle"></div>
+            <h3 class="modal-title balance-title-add" id="balanceModalTitle">
+                <span style="font-size: 1.4rem;">💰</span>
+                Adicionar Saldo
+            </h3>
+            <p class="modal-subtitle" id="balanceModalSubtitle">Informe o valor que deseja adicionar à conta</p>
+            
+            <div class="balance-modal-type" id="balanceModalType">
+                <button class="balance-modal-type-btn active add" data-type="add">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"/>
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                    Adicionar
+                </button>
+                <button class="balance-modal-type-btn" data-type="remove">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                    Retirar
+                </button>
+            </div>
+
+            <div class="form-field">
+                <label for="balanceValueInput">Valor</label>
+                <div class="currency-input-wrapper">
+                    <span class="currency-prefix">R$</span>
+                    <input type="text" id="balanceValueInput" placeholder="0,00" inputmode="numeric" autocomplete="off">
+                </div>
+            </div>
+            <div class="form-field">
+                <label for="balanceDescInput">Descrição (opcional)</label>
+                <input type="text" id="balanceDescInput" placeholder="Ex: Salário, Semana 1..." maxlength="60" autocomplete="off" inputmode="text">
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-ghost" id="balanceCancelBtn">Cancelar</button>
+                <button class="btn btn-primary" id="balanceSaveBtn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                    Confirmar
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- MODAL CADASTRO -->
     <div class="modal-overlay" id="registerOverlay">
         <div class="modal-sheet">
@@ -3427,6 +4106,23 @@
         </div>
     </div>
 
+    <!-- PAINEL DE NOTIFICAÇÕES -->
+    <div class="notif-overlay" id="notifOverlay">
+        <div class="notif-panel">
+            <div class="notif-header">
+                <div class="notif-title">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent);">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                    </svg>
+                    Notificações
+                </div>
+                <button class="notif-clear-all" id="notifClearAllBtn">Limpar tudo</button>
+            </div>
+            <div class="notif-list" id="notifList"></div>
+        </div>
+    </div>
+
     <div class="toast" id="toast">
         <span id="toastIcon">✓</span>
         <span id="toastMsg">Operação realizada</span>
@@ -3446,6 +4142,7 @@
     <script>
         (function() {
             let expensesByMonth = {};
+            let balanceByMonth = {};
             let currentMonth = '2025-01';
             let currentTheme = 'dark';
             let editingExpenseId = null;
@@ -3457,6 +4154,10 @@
             let profile = { name: '', phone: '', email: '', whatsapp: '', photo: '' };
             let hasAccount = false;
             let cropState = { image: null, x: 0, y: 0, scale: 1, container: null };
+            let balanceModalType = 'add';
+            let notifications = [];
+            let notifBadgeSeen = false; // Controla se o usuário já viu as notificações
+            let lastNotifiedMonth = null; // Evita notificar novamente o mesmo mês
 
             const screens = {
                 home: document.getElementById('screenHome'),
@@ -3531,6 +4232,20 @@
             const metricCardPaid = document.getElementById('metricCardPaid');
             const metricCardPending = document.getElementById('metricCardPending');
 
+            const balanceCard = document.getElementById('balanceCard');
+            const balanceValue = document.getElementById('balanceValue');
+            const balanceHistory = document.getElementById('balanceHistory');
+            const addBalanceBtn = document.getElementById('addBalanceBtn');
+            const removeBalanceBtn = document.getElementById('removeBalanceBtn');
+            const balanceModalOverlay = document.getElementById('balanceModalOverlay');
+            const balanceModalTitle = document.getElementById('balanceModalTitle');
+            const balanceModalSubtitle = document.getElementById('balanceModalSubtitle');
+            const balanceModalTypeEl = document.getElementById('balanceModalType');
+            const balanceValueInput = document.getElementById('balanceValueInput');
+            const balanceDescInput = document.getElementById('balanceDescInput');
+            const balanceCancelBtn = document.getElementById('balanceCancelBtn');
+            const balanceSaveBtn = document.getElementById('balanceSaveBtn');
+
             const profileInviteView = document.getElementById('profileInviteView');
             const profileFullView = document.getElementById('profileFullView');
             const profileCreateAccountBtn = document.getElementById('profileCreateAccountBtn');
@@ -3590,14 +4305,29 @@
             const exportCopyBtn = document.getElementById('exportCopyBtn');
             const exportActionBack = document.getElementById('exportActionBack');
 
+            // Notificações
+            const notifOverlay = document.getElementById('notifOverlay');
+            const notifList = document.getElementById('notifList');
+            const notifClearAllBtn = document.getElementById('notifClearAllBtn');
+            const notifBellBtns = [
+                document.getElementById('notifBellBtn'),
+                document.getElementById('notifBellBtnWeek'),
+                document.getElementById('notifBellBtnMonth'),
+                document.getElementById('notifBellBtnProfile')
+            ];
+            const notifBadges = [
+                document.getElementById('notifBadge'),
+                document.getElementById('notifBadgeWeek'),
+                document.getElementById('notifBadgeMonth'),
+                document.getElementById('notifBadgeProfile')
+            ];
+
             const MONTH_NAMES = ['JANEIRO','FEVEREIRO','MARÇO','ABRIL','MAIO','JUNHO','JULHO','AGOSTO','SETEMBRO','OUTUBRO','NOVEMBRO','DEZEMBRO'];
 
-            // ============ SISTEMA DE NAVEGAÇÃO COM HISTORY ============
-            // Rastreia a pilha de navegação interna para nunca sair do app
+            // ============ NAVEGAÇÃO ============
             const navStack = [{ screen: 'home', nav: 'home' }];
 
             function pushNavState(screenName, navName) {
-                // Evita duplicar o mesmo estado consecutivo
                 const last = navStack[navStack.length - 1];
                 if (last && last.screen === screenName && last.nav === navName) return;
                 navStack.push({ screen: screenName, nav: navName });
@@ -3606,10 +4336,10 @@
                 } catch (e) {}
             }
 
-            // Trata o botão voltar físico do Android / navegador
             function handleBackNavigation() {
-                // Se há um modal aberto, fecha ele primeiro
+                if (notifOverlay.classList.contains('active')) { closeNotifPanel(); return true; }
                 if (confirmOverlay.classList.contains('active')) { closeConfirm(); return true; }
+                if (balanceModalOverlay.classList.contains('active')) { closeBalanceModal(); return true; }
                 if (modalOverlay.classList.contains('active')) { closeModal(); return true; }
                 if (editFieldOverlay.classList.contains('active')) { editFieldOverlay.classList.remove('active'); return true; }
                 if (registerOverlay.classList.contains('active')) { registerOverlay.classList.remove('active'); return true; }
@@ -3622,38 +4352,27 @@
                     return true;
                 }
                 if (settingsOverlay.classList.contains('active')) {
-                    // Se estiver numa sub-view de settings, volta para o menu principal
-                    if (settingsThemeView.style.display === 'block') {
-                        showMainSettingsView();
-                        return true;
-                    }
-                    if (settingsAboutView.style.display === 'block') {
-                        showMainSettingsView();
-                        return true;
-                    }
+                    if (settingsThemeView.style.display === 'block') { showMainSettingsView(); return true; }
+                    if (settingsAboutView.style.display === 'block') { showMainSettingsView(); return true; }
                     closeSettings();
                     return true;
                 }
-                // Se está na tela de detalhe, volta para a tela anterior
                 if (!screens.detail.classList.contains('hidden')) {
-                    showScreen(previousScreen);
+                    showScreenInternal(previousScreen);
                     setActiveNav(previousScreen === 'detail' ? 'home' : previousScreen);
                     return true;
                 }
-                // Se não está na tela inicial, volta para ela
                 if (navStack.length > 1) {
                     navStack.pop();
                     const prev = navStack[navStack.length - 1];
                     showScreenInternal(prev.screen);
                     setActiveNav(prev.nav);
-                    if (prev.screen === 'home') updateDashboard();
+                    if (prev.screen === 'home') { updateDashboard(); renderBalance(); }
                     if (prev.screen === 'week') { renderWeekSelector(); renderWeekList(); }
                     if (prev.screen === 'month') { renderMonthList(); }
                     if (prev.screen === 'profile') renderProfile();
                     return true;
                 }
-                // Já está na tela inicial, "empurra" de novo para o history
-                // para impedir que o app feche
                 try {
                     history.pushState({ screen: 'home', nav: 'home' }, '', location.href);
                 } catch (e) {}
@@ -3661,7 +4380,6 @@
                 return true;
             }
 
-            // Força o app a sempre ter um estado no history
             function seedHistory() {
                 try {
                     history.replaceState({ screen: 'home', nav: 'home' }, '', location.href);
@@ -3669,18 +4387,15 @@
                 } catch (e) {}
             }
 
-            // Intercepta o botão voltar
             window.addEventListener('popstate', (e) => {
                 handleBackNavigation();
-                // Sempre re-adiciona um estado para o próximo voltar não fechar o app
                 try {
                     const last = navStack[navStack.length - 1] || { screen: 'home', nav: 'home' };
                     history.pushState(last, '', location.href);
                 } catch (err) {}
             });
 
-            // ============ FIM DO SISTEMA DE NAVEGAÇÃO ============
-
+            // ============ STORAGE ============
             function loadFromStorage() {
                 try {
                     const stored = localStorage.getItem('organiza_data_v2');
@@ -3698,6 +4413,18 @@
                         if (profile.name || profile.email || profile.phone || profile.whatsapp) hasAccount = true;
                     }
                 } catch (e) {}
+                try {
+                    const savedNotifs = localStorage.getItem('organiza_notifs');
+                    if (savedNotifs) notifications = JSON.parse(savedNotifs);
+                } catch (e) { notifications = []; }
+                try {
+                    const seen = localStorage.getItem('organiza_notifs_seen');
+                    if (seen === 'true') notifBadgeSeen = true;
+                } catch (e) {}
+                try {
+                    const lastMonth = localStorage.getItem('organiza_last_notif_month');
+                    if (lastMonth) lastNotifiedMonth = lastMonth;
+                } catch (e) {}
             }
             function saveToStorage() {
                 try { localStorage.setItem('organiza_data_v2', JSON.stringify(expensesByMonth)); } catch (e) {}
@@ -3707,6 +4434,15 @@
             }
             function saveProfile() {
                 try { localStorage.setItem('organiza_profile', JSON.stringify(profile)); } catch (e) {}
+            }
+            function saveNotifications() {
+                try { localStorage.setItem('organiza_notifs', JSON.stringify(notifications)); } catch (e) {}
+            }
+            function saveNotifBadgeSeen() {
+                try { localStorage.setItem('organiza_notifs_seen', 'true'); } catch (e) {}
+            }
+            function saveLastNotifiedMonth(month) {
+                try { localStorage.setItem('organiza_last_notif_month', month); } catch (e) {}
             }
             function clearProfile() {
                 try { localStorage.removeItem('organiza_profile'); } catch (e) {}
@@ -3721,6 +4457,307 @@
                 themeLightBtn.classList.toggle('active', theme === 'light');
             }
 
+            // ============ NOTIFICAÇÕES ============
+            function addNotification(text, type, targetScreen, targetData) {
+                const notif = {
+                    id: Date.now() + '-' + Math.random().toString(36).substr(2, 6),
+                    text: text,
+                    type: type || 'info',
+                    timestamp: Date.now(),
+                    targetScreen: targetScreen || 'home',
+                    targetData: targetData || null
+                };
+                notifications.unshift(notif);
+                if (notifications.length > 50) notifications = notifications.slice(0, 50);
+                saveNotifications();
+                // Se o badge já foi marcado como visto, não mostrar novamente
+                if (!notifBadgeSeen) {
+                    updateNotifBadge();
+                }
+                renderNotifPanel();
+            }
+
+            function updateNotifBadge() {
+                const count = notifications.length;
+                // Se o usuário já viu as notificações, esconder o badge
+                if (notifBadgeSeen) {
+                    notifBadges.forEach(badge => { if (badge) badge.classList.add('hidden'); });
+                    return;
+                }
+                notifBadges.forEach(badge => {
+                    if (!badge) return;
+                    if (count > 0) {
+                        badge.textContent = count > 9 ? '9+' : String(count);
+                        badge.classList.remove('hidden');
+                    } else {
+                        badge.classList.add('hidden');
+                    }
+                });
+            }
+
+            function renderNotifPanel() {
+                notifList.innerHTML = '';
+                if (notifications.length === 0) {
+                    notifList.innerHTML = `
+                        <div class="notif-empty">
+                            <div class="notif-empty-icon">🔔</div>
+                            <p>Nenhuma notificação</p>
+                            <small>As notificações aparecerão aqui</small>
+                        </div>
+                    `;
+                    return;
+                }
+                notifications.forEach(notif => {
+                    const item = document.createElement('div');
+                    item.className = 'notif-item';
+                    item.dataset.notifId = notif.id;
+                    const date = new Date(notif.timestamp);
+                    const dateStr = date.toLocaleDateString('pt-BR') + ' ' + date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                    const iconMap = { warning: '⚠️', info: 'ℹ️', success: '✅', danger: '🔴' };
+                    item.innerHTML = `
+                        <div class="notif-item-icon ${notif.type}">${iconMap[notif.type] || 'ℹ️'}</div>
+                        <div class="notif-item-body">
+                            <div class="notif-item-text">${escapeHtml(notif.text)}</div>
+                            <div class="notif-item-date">${dateStr}</div>
+                        </div>
+                        <div class="notif-item-delete" data-notif-delete="${notif.id}">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="3 6 5 6 21 6"/>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                            </svg>
+                        </div>
+                    `;
+                    item.addEventListener('click', (e) => {
+                        if (e.target.closest('.notif-item-delete')) return;
+                        if (item.classList.contains('show-delete')) {
+                            item.classList.remove('show-delete');
+                            return;
+                        }
+                        navigateToNotifTarget(notif);
+                    });
+                    let pressTimer = null;
+                    const startPress = () => {
+                        pressTimer = setTimeout(() => { item.classList.add('show-delete'); }, 550);
+                    };
+                    const cancelPress = () => { clearTimeout(pressTimer); };
+                    item.addEventListener('mousedown', startPress);
+                    item.addEventListener('mouseup', cancelPress);
+                    item.addEventListener('mouseleave', cancelPress);
+                    item.addEventListener('touchstart', startPress, { passive: true });
+                    item.addEventListener('touchend', cancelPress);
+                    item.addEventListener('touchcancel', cancelPress);
+                    item.querySelector('[data-notif-delete]').addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        deleteNotification(notif.id);
+                    });
+                    notifList.appendChild(item);
+                });
+            }
+
+            function deleteNotification(id) {
+                notifications = notifications.filter(n => n.id !== id);
+                saveNotifications();
+                updateNotifBadge();
+                renderNotifPanel();
+                showToast('Notificação removida');
+            }
+
+            function clearAllNotifications() {
+                if (notifications.length === 0) { showToast('Não há notificações'); return; }
+                showConfirm('Limpar notificações?', 'Todas as notificações serão removidas.', () => {
+                    notifications = [];
+                    saveNotifications();
+                    updateNotifBadge();
+                    renderNotifPanel();
+                    showToast('Notificações limpas');
+                }, 'danger');
+            }
+
+            function navigateToNotifTarget(notif) {
+                closeNotifPanel();
+                const target = notif.targetScreen || 'home';
+                if (target === 'month' && notif.targetData && notif.targetData.filter) {
+                    currentFilter = notif.targetData.filter;
+                    updateFilterChipsUI();
+                    renderMonthList(currentFilter);
+                    showScreen('month');
+                    setActiveNav('month');
+                    return;
+                }
+                if (target === 'week') {
+                    showScreen('week');
+                    setActiveNav('week');
+                    renderWeekSelector();
+                    renderWeekList();
+                    return;
+                }
+                if (target === 'balance') {
+                    showScreen('home');
+                    setActiveNav('home');
+                    updateDashboard();
+                    renderBalance();
+                    setTimeout(() => balanceCard.classList.add('expanded'), 300);
+                    return;
+                }
+                if (target === 'profile') {
+                    showScreen('profile');
+                    setActiveNav('profile');
+                    renderProfile();
+                    return;
+                }
+                showScreen('home');
+                setActiveNav('home');
+                updateDashboard();
+                renderBalance();
+            }
+
+            function openNotifPanel() {
+                renderNotifPanel();
+                notifOverlay.classList.add('active');
+                // CORREÇÃO: Marcar como visto e esconder o badge ao abrir o painel
+                if (!notifBadgeSeen) {
+                    notifBadgeSeen = true;
+                    saveNotifBadgeSeen();
+                    updateNotifBadge();
+                }
+            }
+            function closeNotifPanel() {
+                notifOverlay.classList.remove('active');
+                document.querySelectorAll('.notif-item.show-delete').forEach(el => el.classList.remove('show-delete'));
+            }
+            notifOverlay.addEventListener('click', (e) => {
+                if (e.target === notifOverlay) closeNotifPanel();
+            });
+            notifBellBtns.forEach(btn => {
+                if (btn) btn.addEventListener('click', openNotifPanel);
+            });
+            notifClearAllBtn.addEventListener('click', clearAllNotifications);
+
+            // ============ SALDO ============
+            function loadBalanceStorage() {
+                try {
+                    const stored = localStorage.getItem('organiza_balance_v1');
+                    if (stored) balanceByMonth = JSON.parse(stored);
+                } catch (e) { balanceByMonth = {}; }
+            }
+            function saveBalanceStorage() {
+                try { localStorage.setItem('organiza_balance_v1', JSON.stringify(balanceByMonth)); } catch (e) {}
+            }
+            function getBalanceData() {
+                if (!balanceByMonth[currentMonth]) {
+                    balanceByMonth[currentMonth] = { transactions: [] };
+                }
+                return balanceByMonth[currentMonth];
+            }
+            function getBalanceTotal() {
+                const data = getBalanceData();
+                return data.transactions.reduce((sum, t) => {
+                    if (t.type === 'add') return sum + t.value;
+                    if (t.type === 'remove') return sum - t.value;
+                    if (t.type === 'paid') return sum - t.value;
+                    return sum;
+                }, 0);
+            }
+            function renderBalance() {
+                const total = getBalanceTotal();
+                balanceValue.textContent = formatMoney(total);
+                if (total < 0) balanceValue.classList.add('negative');
+                else balanceValue.classList.remove('negative');
+
+                const data = getBalanceData();
+                balanceHistory.innerHTML = '';
+
+                if (data.transactions.length === 0) {
+                    balanceHistory.innerHTML = '<div class="balance-history-empty">Nenhuma movimentação ainda</div>';
+                    return;
+                }
+
+                const sorted = [...data.transactions].sort((a, b) => b.timestamp - a.timestamp);
+                sorted.forEach(t => {
+                    const item = document.createElement('div');
+                    item.className = 'balance-history-item';
+                    let desc = t.description || (t.type === 'add' ? 'Saldo adicionado' : t.type === 'remove' ? 'Saldo retirado' : `Pagamento: ${t.expenseName}`);
+                    const date = new Date(t.timestamp);
+                    const dateStr = date.toLocaleDateString('pt-BR') + ' ' + date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                    const sign = t.type === 'add' ? '+' : '-';
+                    const typeClass = t.type;
+
+                    item.innerHTML = `
+                        <div class="balance-history-item-left">
+                            <span class="balance-history-dot ${typeClass}"></span>
+                            <div class="balance-history-info">
+                                <div class="balance-history-desc">${escapeHtml(desc)}</div>
+                                <div class="balance-history-date">${dateStr}</div>
+                            </div>
+                        </div>
+                        <div class="balance-history-value ${typeClass}">${sign} ${formatMoney(t.value)}</div>
+                    `;
+                    balanceHistory.appendChild(item);
+                });
+            }
+            function openBalanceModal(type) {
+                balanceModalType = type || 'add';
+                balanceValueInput.value = '';
+                balanceDescInput.value = '';
+                updateBalanceModalUI();
+                balanceModalOverlay.classList.add('active');
+                setTimeout(() => balanceValueInput.focus(), 300);
+            }
+            function closeBalanceModal() {
+                balanceModalOverlay.classList.remove('active');
+            }
+            // CORREÇÃO: Cabeçalho colorido (verde/vermelho) no modal de saldo
+            function updateBalanceModalUI() {
+                document.querySelectorAll('.balance-modal-type-btn').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.type === balanceModalType);
+                });
+                if (balanceModalType === 'add') {
+                    balanceModalTitle.innerHTML = '<span style="font-size: 1.4rem;">💰</span> Adicionar Saldo';
+                    balanceModalTitle.className = 'modal-title balance-title-add';
+                    balanceModalSubtitle.textContent = 'Informe o valor que deseja adicionar à conta';
+                } else {
+                    balanceModalTitle.innerHTML = '<span style="font-size: 1.4rem;">💸</span> Retirar Saldo';
+                    balanceModalTitle.className = 'modal-title balance-title-remove';
+                    balanceModalSubtitle.textContent = 'Informe o valor que deseja retirar da conta';
+                }
+            }
+            function addBalanceTransaction(type, value, description) {
+                const data = getBalanceData();
+                data.transactions.push({
+                    id: Date.now() + '-' + Math.random().toString(36).substr(2, 6),
+                    type: type,
+                    value: value,
+                    description: description || '',
+                    timestamp: Date.now()
+                });
+                saveBalanceStorage();
+                renderBalance();
+            }
+            function registerPaymentDebit(expense) {
+                const data = getBalanceData();
+                data.transactions.push({
+                    id: 'paid-' + expense.id,
+                    type: 'paid',
+                    value: expense.value,
+                    description: `Pagamento: ${expense.name}`,
+                    expenseName: expense.name,
+                    expenseId: expense.id,
+                    timestamp: Date.now()
+                });
+                saveBalanceStorage();
+                renderBalance();
+            }
+            function removePaymentDebit(expenseId) {
+                const data = getBalanceData();
+                const index = data.transactions.findIndex(t => t.type === 'paid' && t.expenseId === expenseId);
+                if (index !== -1) {
+                    data.transactions.splice(index, 1);
+                    saveBalanceStorage();
+                    renderBalance();
+                }
+            }
+
+            // ============ UTILITÁRIOS ============
             function parseMonthKey(key) {
                 const [y, m] = key.split('-').map(Number);
                 return { year: y, month: m - 1 };
@@ -3810,7 +4847,8 @@
                 const num = parseFloat(cleaned);
                 return isNaN(num) ? 0 : num;
             }
-            [expenseValueInput, detailValueInput].forEach(input => {
+            [expenseValueInput, detailValueInput, balanceValueInput].forEach(input => {
+                if (!input) return;
                 input.addEventListener('input', (e) => formatCurrencyInput(e.target));
                 input.addEventListener('blur', (e) => {
                     if (e.target.value === '' || e.target.value === '0,00') e.target.value = '';
@@ -3835,7 +4873,12 @@
                 dueNotification.classList.add('show');
                 dueNotificationTimeout = setTimeout(() => dueNotification.classList.remove('show'), 4000);
             }
+
+            // CORREÇÃO: Só notificar uma vez por mês/sessão
             function checkDueNotifications() {
+                // Se já notificou este mês, não notificar novamente
+                if (lastNotifiedMonth === currentMonth) return;
+
                 const expenses = getExpenses();
                 const tomorrowExpenses = [], todayExpenses = [];
                 const today = new Date(); today.setHours(0, 0, 0, 0);
@@ -3848,11 +4891,18 @@
                 });
                 if (todayExpenses.length > 0) {
                     const n = todayExpenses.length;
-                    showDueNotification(n === 1 ? '1 gasto vence hoje' : `${n} gastos vencem hoje`);
+                    const msg = n === 1 ? '1 gasto vence hoje' : `${n} gastos vencem hoje`;
+                    showDueNotification(msg);
+                    addNotification(msg, 'warning', 'month', { filter: 'pending' });
                 } else if (tomorrowExpenses.length > 0) {
                     const n = tomorrowExpenses.length;
-                    showDueNotification(n === 1 ? '1 gasto vence amanhã' : `${n} gastos vencem amanhã`);
+                    const msg = n === 1 ? '1 gasto vence amanhã' : `${n} gastos vencem amanhã`;
+                    showDueNotification(msg);
+                    addNotification(msg, 'warning', 'month', { filter: 'pending' });
                 }
+                // Marcar este mês como já notificado
+                lastNotifiedMonth = currentMonth;
+                saveLastNotifiedMonth(currentMonth);
             }
 
             function fitValueFontSize(el) {
@@ -3872,7 +4922,6 @@
                 fitValueFontSize(totalPendenteEl);
             }
 
-            // Versão interna que só troca de tela sem mexer no history
             function showScreenInternal(name) {
                 Object.keys(screens).forEach(k => screens[k].classList.add('hidden'));
                 if (screens[name]) screens[name].classList.remove('hidden');
@@ -3881,7 +4930,6 @@
                 if (content) content.scrollTop = 0;
             }
 
-            // Versão pública que registra no history
             function showScreen(name, skipHistory) {
                 showScreenInternal(name);
                 if (!skipHistory) {
@@ -4077,6 +5125,13 @@
                 if (expense) {
                     expense.paid = !expense.paid;
                     saveToStorage();
+                    if (expense.paid) {
+                        registerPaymentDebit(expense);
+                        addNotification(`Pagamento registrado: ${expense.name}`, 'success', 'home', null);
+                    } else {
+                        removePaymentDebit(expense.id);
+                        addNotification(`Pagamento desfeito: ${expense.name}`, 'info', 'home', null);
+                    }
                     updateDashboard();
                     renderMonthList();
                     renderWeekList();
@@ -4090,12 +5145,14 @@
                 if (index === -1) return;
                 const removed = expenses[index];
                 expenses.splice(index, 1);
+                if (removed.paid) removePaymentDebit(id);
                 saveToStorage();
                 updateDashboard();
                 renderMonthList();
                 renderWeekSelector();
                 renderWeekList();
                 showToast(`"${removed.name}" removido`);
+                addNotification(`Gasto removido: ${removed.name}`, 'danger', 'month', { filter: 'all' });
             }
 
             function addExpense() {
@@ -4117,6 +5174,7 @@
                 renderWeekSelector();
                 renderWeekList();
                 showToast(`"${name}" adicionado`);
+                addNotification(`Novo gasto: ${name} • ${formatMoney(value)}`, 'info', 'month', { filter: 'all' });
                 return true;
             }
 
@@ -4174,7 +5232,6 @@
             detailBackBtn.addEventListener('click', () => {
                 showScreenInternal(previousScreen);
                 setActiveNav(previousScreen === 'detail' ? 'home' : previousScreen);
-                // Remove o estado do detail do stack
                 if (navStack.length > 1 && navStack[navStack.length - 1].screen === 'detail') {
                     navStack.pop();
                 }
@@ -4198,6 +5255,7 @@
                 renderWeekSelector();
                 renderWeekList();
                 showToast('Gasto atualizado com sucesso');
+                addNotification(`Gasto atualizado: ${name}`, 'info', 'month', { filter: 'all' });
                 showScreenInternal(previousScreen);
                 setActiveNav(previousScreen === 'detail' ? 'home' : previousScreen);
                 if (navStack.length > 1 && navStack[navStack.length - 1].screen === 'detail') {
@@ -4351,6 +5409,8 @@
                 renderMonthList();
                 renderWeekSelector();
                 renderWeekList();
+                renderBalance();
+                // CORREÇÃO: Só verificar notificações se ainda não notificou este mês
                 checkDueNotifications();
             }
 
@@ -4358,14 +5418,12 @@
                 prev: { count: 0, timer: null, lastClick: 0 },
                 next: { count: 0, timer: null, lastClick: 0 }
             };
-            const RAPID_CLICK_WINDOW = 350;
             const APPLY_DELAY = 140;
 
             function handleArrowClick(direction, btn) {
                 playArrowEffect(btn, direction);
                 const state = direction === 'prev' ? clickState.prev : clickState.next;
                 const now = Date.now();
-                const timeSinceLast = now - state.lastClick;
                 state.lastClick = now;
                 state.count++;
                 clearTimeout(state.timer);
@@ -4428,7 +5486,7 @@
                     const nav = btn.dataset.nav;
                     if (nav === 'add') { openModal(); return; }
                     if (nav === 'home') {
-                        showScreen('home'); setActiveNav('home'); updateDashboard();
+                        showScreen('home'); setActiveNav('home'); updateDashboard(); renderBalance();
                     } else if (nav === 'week') {
                         showScreen('week'); setActiveNav('week');
                         renderWeekSelector(); renderWeekList();
@@ -4570,6 +5628,7 @@
                 registerOverlay.classList.remove('active');
                 renderProfile();
                 showToast('Cadastro criado com sucesso');
+                addNotification('Cadastro criado com sucesso', 'success', 'profile', null);
             });
             loginCancelBtn.addEventListener('click', () => loginOverlay.classList.remove('active'));
             loginOverlay.addEventListener('click', (e) => {
@@ -4898,8 +5957,55 @@
                 }
             });
 
+            // ============ EVENTOS DO SALDO ============
+            balanceCard.querySelector('.balance-header').addEventListener('click', (e) => {
+                if (e.target.closest('.balance-btn')) return;
+                balanceCard.classList.toggle('expanded');
+            });
+
+            addBalanceBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openBalanceModal('add');
+            });
+
+            removeBalanceBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openBalanceModal('remove');
+            });
+
+            balanceModalTypeEl.querySelectorAll('.balance-modal-type-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    balanceModalType = btn.dataset.type;
+                    updateBalanceModalUI();
+                });
+            });
+
+            balanceCancelBtn.addEventListener('click', closeBalanceModal);
+            balanceModalOverlay.addEventListener('click', (e) => {
+                if (e.target === balanceModalOverlay) closeBalanceModal();
+            });
+
+            balanceSaveBtn.addEventListener('click', () => {
+                const value = parseCurrencyInput(balanceValueInput.value.trim());
+                if (value <= 0) { showToast('Informe um valor válido', 'error'); balanceValueInput.focus(); return; }
+                const desc = balanceDescInput.value.trim();
+                if (balanceModalType === 'remove') {
+                    const currentTotal = getBalanceTotal();
+                    if (value > currentTotal) {
+                        showToast('Saldo insuficiente para retirada', 'error');
+                        return;
+                    }
+                }
+                addBalanceTransaction(balanceModalType, value, desc);
+                const msg = balanceModalType === 'add' ? 'Saldo adicionado' : 'Saldo retirado';
+                showToast(msg);
+                addNotification(`${msg}: ${formatMoney(value)}${desc ? ' • ' + desc : ''}`, balanceModalType === 'add' ? 'success' : 'danger', 'balance', null);
+                closeBalanceModal();
+            });
+
             function init() {
                 loadFromStorage();
+                loadBalanceStorage();
                 applyTheme(currentTheme);
                 seedHistory();
 
@@ -4919,7 +6025,9 @@
 
                 document.addEventListener('keydown', (e) => {
                     if (e.key === 'Escape') {
+                        if (notifOverlay.classList.contains('active')) closeNotifPanel();
                         if (modalOverlay.classList.contains('active')) closeModal();
+                        if (balanceModalOverlay.classList.contains('active')) closeBalanceModal();
                         if (settingsOverlay.classList.contains('active')) closeSettings();
                         if (confirmOverlay.classList.contains('active')) closeConfirm();
                         if (editFieldOverlay.classList.contains('active')) editFieldOverlay.classList.remove('active');
@@ -4934,9 +6042,11 @@
                 showScreenInternal('home');
                 setActiveNav('home');
                 updateDashboard();
+                renderBalance();
                 renderMonthList();
                 renderWeekSelector();
                 renderWeekList();
+                updateNotifBadge();
 
                 setTimeout(fitAllValueFontSizes, 100);
                 setTimeout(checkDueNotifications, 800);
